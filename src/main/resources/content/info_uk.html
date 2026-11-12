@@ -1,0 +1,36 @@
+<div th:fragment="content">
+
+    <div class="pure-g pb-5">
+        <div class="pure-u-1-2">
+            <a href="/plugin/tg/doc">Документація</a>
+        </div>
+        <div class="pure-u-1-2 s-align-right">
+            <button onclick="location.reload();" class="pure-button">Оновити</button>
+        </div>
+    </div>
+
+    <div>
+        <h3>
+            Активні боти
+        </h3>
+
+        <table class="pt-2 pure-table s-w100">
+            <thead>
+            <tr>
+                <th>Ідентифікатор</th>
+                <th>Користувач</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="info : ${infoList}">
+                <td th:text="${info.id}">Id</td>
+                <td th:text="${info.username}">Name</td>
+            </tr>
+            <tr th:if="${infoList.isEmpty()}">
+                <td colspan="4" class="s-align-center">Нічого немає</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
