@@ -19,7 +19,6 @@ public class TelegramBotLuaTableTest {
     public void editMessageTextFunction() {
         TelegramBot telegramBot = Mockito.mock(TelegramBot.class);
         Mockito.when(telegramBot.getId()).thenReturn("00000");
-        Mockito.when(telegramBot.getUsername()).thenReturn("MOCK");
         Mockito.when(telegramBot.editMessageText(Mockito.any())).thenReturn("{}");
 
         TelegramBotLuaTable telegramBotLua = new TelegramBotLuaTable(telegramBot);
@@ -40,7 +39,6 @@ public class TelegramBotLuaTableTest {
     public void getUpdate() {
         TelegramBot telegramBot = Mockito.mock(TelegramBot.class);
         Mockito.when(telegramBot.getId()).thenReturn("00000");
-        Mockito.when(telegramBot.getUsername()).thenReturn("MOCK");
         Mockito.when(telegramBot.getUpdate()).thenReturn(Optional.of("{\"key\":\"value\"}"));
 
         TelegramBotLuaTable telegramBotLua = new TelegramBotLuaTable(telegramBot);
@@ -56,7 +54,6 @@ public class TelegramBotLuaTableTest {
     public void setCommands() {
         TelegramBot telegramBot = Mockito.mock(TelegramBot.class);
         Mockito.when(telegramBot.getId()).thenReturn("00000");
-        Mockito.when(telegramBot.getUsername()).thenReturn("MOCK");
         Mockito.when(telegramBot.setCommands(Mockito.any())).thenReturn("{}");
 
         TelegramBotLuaTable telegramBotLua = new TelegramBotLuaTable(telegramBot);
@@ -85,7 +82,6 @@ public class TelegramBotLuaTableTest {
     public void sendMarkup() {
         TelegramBot telegramBot = Mockito.mock(TelegramBot.class);
         Mockito.when(telegramBot.getId()).thenReturn("00000");
-        Mockito.when(telegramBot.getUsername()).thenReturn("MOCK");
         Mockito.when(telegramBot.sendMarkup(Mockito.any())).thenReturn("{}");
 
         TelegramBotLuaTable telegramBotLua = new TelegramBotLuaTable(telegramBot);
@@ -136,7 +132,6 @@ public class TelegramBotLuaTableTest {
     public void sendTextMessage() {
         TelegramBot telegramBot = Mockito.mock(TelegramBot.class);
         Mockito.when(telegramBot.getId()).thenReturn("00000");
-        Mockito.when(telegramBot.getUsername()).thenReturn("MOCK");
         Mockito.when(telegramBot.sendTextMessage(Mockito.any())).thenReturn("{}");
 
         TelegramBotLuaTable telegramBotLua = new TelegramBotLuaTable(telegramBot);
@@ -156,7 +151,6 @@ public class TelegramBotLuaTableTest {
     public void sendAnswerCallbackQuery() {
         TelegramBot telegramBot = Mockito.mock(TelegramBot.class);
         Mockito.when(telegramBot.getId()).thenReturn("00000");
-        Mockito.when(telegramBot.getUsername()).thenReturn("MOCK");
         Mockito.when(telegramBot.sendAnswerCallbackQuery(Mockito.any())).thenReturn("{}");
 
         TelegramBotLuaTable telegramBotLua = new TelegramBotLuaTable(telegramBot);
@@ -171,7 +165,6 @@ public class TelegramBotLuaTableTest {
     public void deleteCommands() {
         TelegramBot telegramBot = Mockito.mock(TelegramBot.class);
         Mockito.when(telegramBot.getId()).thenReturn("00000");
-        Mockito.when(telegramBot.getUsername()).thenReturn("MOCK");
         Mockito.when(telegramBot.deleteCommands()).thenReturn("{}");
 
         TelegramBotLuaTable telegramBotLua = new TelegramBotLuaTable(telegramBot);
@@ -186,7 +179,6 @@ public class TelegramBotLuaTableTest {
     public void deleteMessage() {
         TelegramBot telegramBot = Mockito.mock(TelegramBot.class);
         Mockito.when(telegramBot.getId()).thenReturn("00000");
-        Mockito.when(telegramBot.getUsername()).thenReturn("MOCK");
         Mockito.when(telegramBot.deleteMessage(Mockito.any())).thenReturn("{}");
 
         TelegramBotLuaTable telegramBotLua = new TelegramBotLuaTable(telegramBot);

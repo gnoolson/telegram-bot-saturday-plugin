@@ -7,7 +7,7 @@ public interface TelegramBot {
 
     String getId();
 
-    String getUsername();
+    int getNumberOfUpdatesInQueue();
 
     long getCreatedTs();
 

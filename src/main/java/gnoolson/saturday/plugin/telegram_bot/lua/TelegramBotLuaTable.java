@@ -37,7 +37,6 @@ public class TelegramBotLuaTable extends LuaTable {
         this.set("deleteMessage", new DeleteMessageFunction());
 
         this.set("id", telegramBot.getId());
-        this.set("username", telegramBot.getUsername());
     }
 
     /*

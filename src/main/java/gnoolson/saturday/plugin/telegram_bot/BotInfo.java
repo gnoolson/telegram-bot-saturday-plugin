@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public class BotInfo {
 
     private final String id;
-    private final String username;
     private final long createdTs;
+    private final int numberOfUpdatesInQueue;
 
 }

@@ -52,10 +52,11 @@ public class TelegramImpl implements Telegram {
         List<BotInfo> result = new ArrayList<>(this.map.size());
 
         for (Map.Entry<String, TelegramBot> entry : this.map.entrySet()) {
-            result.add(new BotInfo(
-                    entry.getKey(),
-                    entry.getValue().getUsername(),
-                    entry.getValue().getCreatedTs()));
+            String id = entry.getKey();
+            long created = entry.getValue().getCreatedTs();
+            int numberOfUpdatesInQueue = entry.getValue().getNumberOfUpdatesInQueue();
+
+            result.add(new BotInfo(id, created, numberOfUpdatesInQueue));
         }
 
         return result;
@@ -74,18 +75,17 @@ public class TelegramImpl implements Telegram {
                 prop.load(fis);
             }
 
-            String token = prop.getProperty("tg.token");
-            String username = prop.getProperty("tg.username");
-            String scriptId = prop.getProperty("tg.script.script_id");
-            int queue = Integer.valueOf(prop.getProperty("tg.queue"));
-            boolean executeScript = Boolean.parseBoolean(prop.getProperty("tg.script.execute"));
+            TelegramBotConfig telegramBotConfig = new TelegramBotConfig(
+                    prop.getProperty("tg.token"),
+                    Integer.valueOf(prop.getProperty("tg.queue_size")),
+                    Boolean.parseBoolean(prop.getProperty("tg.update_handler.script.execute")),
+                    prop.getProperty("tg.update_handler.script.id"),
+                    Boolean.parseBoolean(prop.getProperty("tg.exception_handler.script.execute")),
+                    prop.getProperty("tg.exception_handler.script.id")
+            );
 
             return new TelegramBotImpl(id,
-                    username,
-                    token,
-                    scriptId,
-                    queue,
-                    executeScript,
+                    telegramBotConfig,
                     this.scriptLauncherGateway
             );
         } catch (IOException e) {

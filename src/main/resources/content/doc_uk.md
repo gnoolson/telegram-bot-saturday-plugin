@@ -34,11 +34,12 @@ local TG = require("tg")
 local bot = TG.getOrCreateBot("bot", "file:./plugins/tg/bot.properties")
 --[[
 # вміст файлу bot.properties
-tg.token=1234567890:AABBCCDDEEFF11223344556677889900AA_           # токен, отриманий від BotFather
-tg.username=bot_username                                          # username бота (вказаний під час створення)
-tg.script.execute=false                                           # виконувати сценарій, коли бот отримує вхідне повідомлення
-tg.script.script_id=xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx            # Id сценарію. Якщо tg.script.execute=false, можна не вказувати
-tg.queue=64                                                       # розмір черги оновлень. Якщо кількість буде перевищена, старіші оновлення видалятимуться
+tg.token=1234567890:AABBCCDDEEFF11223344556677889900AA_              # токен, отриманий від BotFather
+tg.update_handler.script.execute=false                               # виконувати сценарій, коли бот отримує вхідне оновлення
+tg.update_handler.script.id=xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx       # Id сценарію. Якщо tg.update_handler.script.execute=false, можна не вказувати
+tg.exception_handler.script.execute=false                            # виконувати сценарій, коли виникають помилки при отриманні оновлень (підключення). Інформація про помилку буде в Args
+tg.exception_handler.script.id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  # Id сценарію для обробки помилок. Якщо tg.exception_handler.script.execute=false, можна не вказувати
+tg.queue_size=64                                                     # розмір черги оновлень. Якщо кількість буде перевищена, старіші оновлення видалятимуться
 ]]
 
 -- отримання вхідного оновлення з черги
@@ -180,8 +181,8 @@ Output.print(list)
 
 -- що буде надруковано
 [ {
-  "username" : "bot_username",
   "id" : "bot",
-  "created" : 1794473762289
+  "created" : 1794473762289,
+  "numberOfUpdatesInQueue" : 0
 } ]
 ```

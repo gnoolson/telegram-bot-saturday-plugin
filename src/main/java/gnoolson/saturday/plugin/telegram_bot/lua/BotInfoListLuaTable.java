@@ -14,8 +14,8 @@ public class BotInfoListLuaTable extends LuaTable {
         for (BotInfo botInfo : infoList) {
             LuaTable luaTable = new LuaTable();
             luaTable.set("id", LuaValue.valueOf(botInfo.getId()));
-            luaTable.set("username", LuaValue.valueOf(botInfo.getUsername()));
             luaTable.set("created", LuaValue.valueOf((double) botInfo.getCreatedTs()));
+            luaTable.set("numberOfUpdatesInQueue", LuaValue.valueOf(botInfo.getNumberOfUpdatesInQueue()));
             this.set(index, luaTable);
 
             ++index;

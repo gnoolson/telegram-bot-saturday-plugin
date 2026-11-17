@@ -3,6 +3,7 @@ package gnoolson.saturday.plugin.telegram_bot;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import gnoolson.saturday_plugin_api.ScriptLauncherGateway;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,19 +13,19 @@ class Dev {
 
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
-//    @Test
+    @Test
     public void runBot() throws Exception {
         TelegramPlugin telegramPlugin = new TelegramPlugin();
         telegramPlugin.setScriptLauncherGateway(new ScriptLauncherGateway() {
             @Override
             public void execute(String scriptId, Map<String, Object> args) {
-
+                System.out.println(args);
             }
         });
         telegramPlugin.start();
 
         Telegram telegram = telegramPlugin.getTelegram();
-        TelegramBot dev = telegram.getOrCreateBot("dev", "classpath:bot.properties");
+        TelegramBot dev = telegram.getOrCreateBot("dev", "file:/data/project/java/_CONFIG/tg_bot.properties");
 
         dev.setCommands(new ArrayList<Command>(){{
             add(new Command("command_1", "description___1"));

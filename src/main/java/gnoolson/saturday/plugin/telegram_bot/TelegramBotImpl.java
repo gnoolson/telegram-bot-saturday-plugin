@@ -3,6 +3,9 @@ package gnoolson.saturday.plugin.telegram_bot;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pengrad.telegrambot.ExceptionHandler;
+import com.pengrad.telegrambot.TelegramException;
+import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.BotCommand;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
@@ -16,10 +19,9 @@ import com.pengrad.telegrambot.response.SendResponse;
 import gnoolson.saturday_plugin_api.ScriptLauncherGateway;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,17 +35,12 @@ public class TelegramBotImpl implements TelegramBot {
         JSON_MAPPER.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
     }
 
-    private final int queueLength;
+    private final String id;
+    private final TelegramBotConfig telegramBotConfig;
     private final ConcurrentLinkedQueue<Update> queue = new ConcurrentLinkedQueue<>();
     private final com.pengrad.telegrambot.TelegramBot pengradTgBot;
-    private final String scriptId;
     private final ScriptLauncherGateway scriptLauncherGateway;
-    private final boolean executeScript;
     private final ExecutorService executor = Executors.newCachedThreadPool();
-    @Getter
-    private final String id;
-    @Getter
-    private final String username;
     @Getter
     private final long createdTs;
 
@@ -51,26 +48,36 @@ public class TelegramBotImpl implements TelegramBot {
      *
      *
      * */
-    public TelegramBotImpl(String id,
-                           String username,
-                           String token,
-                           String scriptId,
-                           int queueLength,
-                           boolean executeScript,
+    public TelegramBotImpl(String id, TelegramBotConfig telegramBotConfig,
                            ScriptLauncherGateway scriptLauncherGateway) {
 
         this.id = id;
-        this.username = username;
-        this.scriptId = scriptId;
+        this.telegramBotConfig = telegramBotConfig;
         this.scriptLauncherGateway = scriptLauncherGateway;
-        this.executeScript = executeScript;
         this.createdTs = System.currentTimeMillis();
-        this.pengradTgBot = new com.pengrad.telegrambot.TelegramBot(token);
-        this.pengradTgBot.setUpdatesListener((updates) -> {
-            updates.forEach(this::handle);
-            return -1;
+        this.pengradTgBot = new com.pengrad.telegrambot.TelegramBot(telegramBotConfig.getToken());
+        this.pengradTgBot.setUpdatesListener(new UpdatesListener() {
+            @Override
+            public int process(List<Update> list) {
+                list.forEach(update -> handle(update));
+                return -1;
+            }
+        }, new ExceptionHandler() {
+            @Override
+            public void onException(TelegramException e) {
+                exceptionHandle(e);
+            }
         });
-        this.queueLength = queueLength;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public int getNumberOfUpdatesInQueue() {
+        return queue.size();
     }
 
     @Override
@@ -183,16 +190,33 @@ public class TelegramBotImpl implements TelegramBot {
      * */
     private synchronized void handle(Update update) {
         try {
-            if (queue.size() >= queueLength) {
+            if (queue.size() >= telegramBotConfig.getQueueSize()) {
                 queue.poll();
             }
 
             queue.add(update);
 
-            if (executeScript) {
+            if (telegramBotConfig.isExecuteUpdateHandler()) {
                 executor.execute(() -> {
-                    scriptLauncherGateway.execute(scriptId, Collections.emptyMap());
+                    scriptLauncherGateway.execute(telegramBotConfig.getUpdateHandlerScriptId(), Collections.emptyMap());
                 });
+            }
+        } catch (Exception e) {
+            log.warn("Exception", e);
+        }
+    }
+
+    private synchronized void exceptionHandle(Exception exception) {
+        try {
+            if (telegramBotConfig.isExecuteExceptionHandler()) {
+                executor.execute(() -> {
+                    Map<String, Object> args = new HashMap<>();
+                    args.put("reason", ExceptionUtils.getMessage(exception));
+                    args.put("stack", ExceptionUtils.getStackTrace(exception));
+                    scriptLauncherGateway.execute(telegramBotConfig.getExceptionHandlerScriptId(), args);
+                });
+            } else {
+                log.warn("Exception", exception);
             }
         } catch (Exception e) {
             log.warn("Exception", e);

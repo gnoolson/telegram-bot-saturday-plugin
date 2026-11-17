@@ -18,16 +18,18 @@
             <thead>
             <tr>
                 <th>Id</th>
-                <th>Username</th>
+                <th>Created</th>
+                <th>Queue</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="info : ${infoList}">
-                <td th:text="${info.id}">Id</td>
-                <td th:text="${info.username}">Name</td>
+                <td th:text="${info.id}"></td>
+                <td th:text="${#dates.format(new java.util.Date(info.createdTs), 'dd/MMM/yyyy HH:mm')}"></td>
+                <td th:text="${info.numberOfUpdatesInQueue}"></td>
             </tr>
             <tr th:if="${infoList.isEmpty()}">
-                <td colspan="4" class="s-align-center">Nothing to display</td>
+                <td colspan="3" class="s-align-center">Nothing to display</td>
             </tr>
             </tbody>
         </table>

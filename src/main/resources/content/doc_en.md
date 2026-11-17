@@ -33,11 +33,12 @@ local TG = require("tg")
 local bot = TG.getOrCreateBot("bot", "file:./plugins/tg/bot.properties")
 --[[
 # bot.properties file contents
-tg.token=1234567890:AABBCCDDEEFF11223344556677889900AA_           # token obtained from BotFather
-tg.username=bot_username                                          # bot username (specified during creation)
-tg.script.execute=false                                           # execute the script when the bot receives an incoming message
-tg.script.script_id=xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx            # script ID. Can be omitted if tg.script.execute=false
-tg.queue=64                                                       # update queue size. If exceeded, the oldest updates will be dropped
+tg.token=1234567890:AABBCCDDEEFF11223344556677889900AA_              # token obtained from BotFather
+tg.update_handler.script.execute=false                               # execute the script when the bot receives an incoming update
+tg.update_handler.script.id=xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx       # script ID. Can be omitted if tg.update_handler.script.execute=false
+tg.exception_handler.script.execute=false                            # execute the script when errors occur while receiving updates (connection errors). Error details will be available in Args
+tg.exception_handler.script.id=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx  # error handler script ID. Can be omitted if tg.exception_handler.script.execute=false
+tg.queue_size=64                                                     # update queue size. If exceeded, the oldest updates will be dropped
 ]]
 
 -- retrieves an incoming update from the queue
@@ -179,8 +180,8 @@ Output.print(list)
 
 -- output:
 [ {
-  "username" : "bot_username",
   "id" : "bot",
-  "created" : 1794473762289
+  "created" : 1794473762289,
+  "numberOfUpdatesInQueue" : 0
 } ]
 ```

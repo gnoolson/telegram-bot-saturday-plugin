@@ -6,7 +6,7 @@
 
     <groupId>gnoolson.saturday</groupId>
     <artifactId>telegram-bot-saturday-plugin</artifactId>
-    <version>beta-10.11.2026</version>
+    <version>beta-17.11.2026</version>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -35,6 +35,12 @@
             <artifactId>pf4j</artifactId>
             <version>3.10.0</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.17.0</version>
         </dependency>
 
         <dependency>
@@ -73,9 +79,9 @@
 
         <dependency>
             <groupId>com.github.gnoolson</groupId>
-            <!--            <groupId>gnoolson.saturday</groupId>-->
+<!--        <groupId>gnoolson.saturday</groupId>-->
             <artifactId>saturday-plugin-api</artifactId>
-            <version>2.1.1</version>
+            <version>3.0.0</version>
             <scope>provided</scope>
         </dependency>
 
